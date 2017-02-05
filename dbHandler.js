@@ -5,15 +5,14 @@
 const pg = require('pg');
 
 let client;
-// const conStr = "postgres://testuser@localhost:5432/testdb";
 function createClient() {
     client = new pg.Client({
         host : 'localhost',
         user : 'testuser',
+        password : '12345',
         database : 'testdb',
-        port : 5001
+        port : 5432
     });
-    // client = new pg.Client(conStr);
 }
 
 module.exports = {
@@ -23,12 +22,14 @@ module.exports = {
             if(err)
                 throw err;
         });
-        client.query('INSERT INTO testtable(name) VALUES("$");', [name], function (err, result) {
+        client.query("INSERT INTO testtable(name) VALUES($1);", [name], function (err, result) {
+            client.end();
             if(err)
-                console.log('2'+err);
-            callBack();
+                console.error(err);
+            else
+                callBack('user entered');
         });
-        // client.end();
+
     },
     fetchUser : function (callBack) {
         createClient();
@@ -37,8 +38,11 @@ module.exports = {
             console.error(err);
         });
         client.query('SELECT * FROM testtable;', function (err, rows, fields) {
-            callBack(rows);
+            client.end();
+            if(err)
+                console.error(err);
+            else
+                callBack(rows);
         });
-        client.end();
     }
 };

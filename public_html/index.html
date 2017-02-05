@@ -14,9 +14,11 @@
 <button type="button" id="fetch">Display Users</button>
 
 <script type="text/javascript">
-$.ready(function () {
-    $('#fecth').click(function () {
-        $.get('/fetch');
+$(document).ready(function () {
+    $('#fetch').click(function () {
+        $.get('/fetch', function (data, status) {
+            window.location.href = '/fetch';
+        });
     });
 });
 </script>

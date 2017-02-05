@@ -7,12 +7,12 @@ const db = require('./dbHandler');
 
 const app = express();
 
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 5001);
 app.use('/', express.static(__dirname + '/public_html'));
 
 app.get('/add', function (req, res) {
-    db.addUser(req.query.name, function () {
-        res.send('user entered');
+    db.addUser(req.query.name, function (result) {
+        res.send(result);
     });
 });
 
